@@ -3,11 +3,11 @@ import random
 
 class GuessingGame:
     def __init__(self):
-        self.number = random.randint(1, 100)
+        self.number = random.randint(1, 20)
         self.guesses = 0
 
     def play(self):
-        print("Guess a number between 1 and 100.")
+        print("Guess a number between 1 and 20.")
         guess = int(input())
 
         while guess != self.number:
