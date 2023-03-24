@@ -3,7 +3,7 @@ import random
 
 class NumberGame:
     def __init__(self):
-        self.target_number = random.randint(1, 100)
+        self.target_number = random.randint(1, 20)
         self.num_guesses = 0
         self.max_guesses = 5
 
@@ -23,7 +23,7 @@ class NumberGame:
 
 def main():
     game = NumberGame()
-    print("Guess the number between 1 and 100. You have {} guesses.".format(game.max_guesses))
+    print("Guess the number between 1 and 20. You have {} guesses.".format(game.max_guesses))
 
     for i in range(game.max_guesses):
         while True:
