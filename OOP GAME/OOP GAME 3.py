@@ -3,7 +3,7 @@ import random
 
 class NumberGame:
     def __init__(self):
-        self.target_number = random.randint(1, 100)
+        self.target_number = random.randint(1, 20)
         self.num_guesses = 0
         self.max_guesses = 5
 
