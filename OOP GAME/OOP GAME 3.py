@@ -23,7 +23,7 @@ class NumberGame:
 
 def main():
     game = NumberGame()
-    print("Guess the number between 1 and 100. You have {} guesses.".format(game.max_guesses))
+    print("Guess the number between 1 and 20. You have {} guesses.".format(game.max_guesses))
 
     while True:
         guess = input("Enter your guess: ")
