@@ -1,2 +1,2 @@
 # PYTHON BASIC PROJECT
-PYTHON beginner project written by Muhammad Iqbal Al Maududi
+PYTHON project written by Muhammad Iqbal Al Maududi
