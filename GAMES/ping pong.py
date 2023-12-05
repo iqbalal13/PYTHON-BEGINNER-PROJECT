@@ -1,109 +1,87 @@
-import turtle
+import pygame
+import sys
+import random
 
-# Create the screen
-screen = turtle.Screen()
-screen.title("Ping Pong Game")
-screen.bgcolor("black")
-screen.setup(width=600, height=400)
+# Initialize Pygame
+pygame.init()
 
-# Create the left paddle
-left_paddle = turtle.Turtle()
-left_paddle.speed(0)
-left_paddle.shape("square")
-left_paddle.color("white")
-left_paddle.shapesize(stretch_wid=5, stretch_len=1)
-left_paddle.penup()
-left_paddle.goto(-250, 0)
+# Set up display
+width, height = 800, 600
+window = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Pong Game")
 
-# Create the right paddle
-right_paddle = turtle.Turtle()
-right_paddle.speed(0)
-right_paddle.shape("square")
-right_paddle.color("white")
-right_paddle.shapesize(stretch_wid=5, stretch_len=1)
-right_paddle.penup()
-right_paddle.goto(250, 0)
+# Colors
+white = (255, 255, 255)
+black = (0, 0, 0)
 
-# Create the ball
-ball = turtle.Turtle()
-ball.speed(40)
-ball.shape("circle")
-ball.color("white")
-ball.penup()
-ball.goto(0, 0)
-ball.dx = 2
-ball.dy = -2
+# Paddle
+paddle_width, paddle_height = 15, 100
+player_paddle = pygame.Rect(width - 20 - paddle_width, height // 2 - paddle_height // 2, paddle_width, paddle_height)
+opponent_paddle = pygame.Rect(10, height // 2 - paddle_height // 2, paddle_width, paddle_height)
+paddle_speed = 15
 
-# Set the score to zero
-left_score = 0
-right_score = 0
+# Ball
+ball_size = 15
+ball = pygame.Rect(width // 2 - ball_size // 2, height // 2 - ball_size // 2, ball_size, ball_size)
+ball_speed = [7 * random.choice((1, -1)), 7 * random.choice((1, -1))]
 
-# Create the score display
-score_display = turtle.Turtle()
-score_display.speed(0)
-score_display.color("white")
-score_display.penup()
-score_display.hideturtle()
-score_display.goto(0, 170)
-score_display.write("Player 1: {}  Player 2: {}".format(left_score, right_score), align="center", font=("Courier", 16, "normal"))
+# Score
+player_score = 0
+opponent_score = 0
+font = pygame.font.SysFont(None, 35)
 
-# Move the left paddle up
-def left_paddle_up():
-    y = left_paddle.ycor()
-    y += 20
-    left_paddle.sety(y)
-
-# Move the left paddle down
-def left_paddle_down():
-    y = left_paddle.ycor()
-    y -= 20
-    left_paddle.sety(y)
-
-# Move the right paddle up
-def right_paddle_up():
-    y = right_paddle.ycor()
-    y += 20
-    right_paddle.sety(y)
-
-# Move the right paddle down
-def right_paddle_down():
-    y = right_paddle.ycor()
-    y -= 20
-    right_paddle.sety(y)
-
-# Keyboard bindings
-screen.listen()
-screen.onkeypress(left_paddle_up, "w")
-screen.onkeypress(left_paddle_down, "s")
-screen.onkeypress(right_paddle_up, "Up")
-screen.onkeypress(right_paddle_down, "Down")
+# Function to reset the ball
+def reset_ball():
+    return pygame.Rect(width // 2 - ball_size // 2, height // 2 - ball_size // 2, ball_size, ball_size)
 
 # Main game loop
 while True:
-    # Move the ball
-    ball.setx(ball.xcor() + ball.dx)
-    ball.sety(ball.ycor() + ball.dy)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
 
-    # Check for top and bottom borders
-    if ball.ycor() > 190:
-        ball.sety(190)
-        ball.dy *= -1
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_UP] and opponent_paddle.top > 0:
+        opponent_paddle.y -= paddle_speed
+    if keys[pygame.K_DOWN] and opponent_paddle.bottom < height:
+        opponent_paddle.y += paddle_speed
 
-    if ball.ycor() < -190:
-        ball.sety(-190)
-        ball.dy *= -1
+    player_paddle.y = ball.y  # Make the player's paddle follow the ball
 
-    # Check for left and right borders
-    if ball.xcor() > 290:
-        ball.goto(0, 0)
-        ball.dy *= -1
-        left_score += 1
-        score_display.clear()
-        score_display.write("Player 1: {}  Player 2: {}".format(left_score, right_score), align="center", font=("Courier", 16, "normal"))
+    # Update ball position
+    ball.x += ball_speed[0]
+    ball.y += ball_speed[1]
 
-    if ball.xcor() < -290:
-        ball.goto(0, 0)
-        ball.dy *= -1
-        right_score += 1
-        score_display.clear()
-        score_display.write("Player 1: {}  Player 2: {}".format(left_score, right_score), align="center", font=("Courier", 16, "normal"))
+    # Ball collision with top and bottom walls
+    if ball.top <= 0 or ball.bottom >= height:
+        ball_speed[1] = -ball_speed[1]
+
+    # Ball collision with paddles
+    if ball.colliderect(player_paddle) or ball.colliderect(opponent_paddle):
+        ball_speed[0] = -ball_speed[0]
+
+    # Scoring
+    if ball.left <= 0:
+        player_score += 1
+        ball = reset_ball()
+    elif ball.right >= width:
+        opponent_score += 1
+        ball = reset_ball()
+
+    # Drawing everything on the window
+    window.fill(black)
+    pygame.draw.rect(window, white, player_paddle)
+    pygame.draw.rect(window, white, opponent_paddle)
+    pygame.draw.ellipse(window, white, ball)
+    pygame.draw.aaline(window, white, (width // 2, 0), (width // 2, height))
+
+    # Display scores
+    player_text = font.render(str(player_score), True, white)
+    window.blit(player_text, (width // 2 + 20, 20))
+    opponent_text = font.render(str(opponent_score), True, white)
+    window.blit(opponent_text, (width // 2 - 40, 20))
+
+    pygame.display.flip()
+
+    pygame.time.Clock().tick(60)
