@@ -1,40 +1,82 @@
-def ask_question(question, correct_answer):
-    try:
-        user_answer = input(question + " ").lower()
-        
-        # Check if the user's answer is correct
-        if user_answer == correct_answer.lower():
-            print("Correct!\n")
-            return True
-        else:
-            print("Incorrect. The correct answer is '{}'.".format(correct_answer))
-            return False
+import time
 
-    except KeyboardInterrupt:
-        print("\nQuiz interrupted. Exiting...")
-        exit()
+def print_welcome_message():
+    print("Welcome to the Simple Adventure Game!")
+    time.sleep(1)
+    print("You find yourself standing at a crossroad.")
+    time.sleep(1)
+    print("Make a choice to determine your destiny.")
 
-def quiz():
+def make_choice(choices, max_attempts):
+    for attempts in range(max_attempts):
+        try:
+            user_input = input(f"\nChoose an option:\n1. {choices[0]}\n2. {choices[1]}\nEnter the number of your choice: ")
+            choice = int(user_input)
+
+            if 1 <= choice <= len(choices):
+                return choice
+            else:
+                print("Invalid choice. Please enter a valid number.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+    print("Too many invalid attempts. Exiting.")
+    exit()
+
+def play_left_path():
+    print("\nYou chose to go left.")
+    time.sleep(1)
+    print("You encounter a mystical forest.")
+    time.sleep(1)
+    print("A fairy offers you a magical potion. Do you accept?")
+
+    choices = ["Yes", "No"]
+    choice = make_choice(choices, 3)
+
+    if choice == 1:
+        print("\nYou accept the potion and feel a surge of magical energy.")
+        time.sleep(1)
+        print("The fairy guides you safely through the forest.")
+    else:
+        print("\nYou decline the potion and cautiously navigate the forest.")
+        time.sleep(1)
+        print("You emerge safely on the other side.")
+        return 1  # Additional point for making it through the forest
+
+def play_right_path():
+    print("\nYou chose to go right.")
+    time.sleep(1)
+    print("You find a treasure chest.")
+    time.sleep(1)
+    print("Do you open the chest?")
+
+    choices = ["Yes", "No"]
+    choice = make_choice(choices, 3)
+
+    if choice == 1:
+        print("\nYou open the chest and find a pile of gold coins.")
+        time.sleep(1)
+        print("Congratulations! You're rich!")
+        return 2  # Additional points for finding the treasure
+    else:
+        print("\nYou decide not to open the chest and continue your journey.")
+        return 0
+
+def main():
+    print_welcome_message()
+
+    # First choice
+    choices = ["Go left", "Go right"]
+    choice = make_choice(choices, 3)
+
     score = 0
 
-    # Define your questions and answers
-    questions_and_answers = [
-        ("What is the capital of France?", "Paris"),
-        ("Which planet is known as the Red Planet?", "Mars"),
-        ("What is the largest mammal in the world?", "Blue Whale"),
-        # Add more questions as needed
-    ]
+    if choice == 1:
+        score += play_left_path()
+    else:
+        score += play_right_path()
 
-    # Ask each question and update the score
-    for question, answer in questions_and_answers:
-        try:
-            if ask_question(question, answer):
-                score += 1
-        except Exception as e:
-            print("An error occurred:", e)
-
-    print("Quiz completed! Your final score is {}/{}".format(score, len(questions_and_answers)))
+    print(f"\nThanks for playing the Simple Adventure Game!\nYour final score: {score}")
 
 if __name__ == "__main__":
-    print("Welcome to the Quiz Game!\n")
-    quiz()
+    main()
