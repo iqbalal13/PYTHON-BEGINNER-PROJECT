@@ -1,3 +1,5 @@
+import time
+
 class QuizGame:
     def __init__(self):
         self.questions = [
