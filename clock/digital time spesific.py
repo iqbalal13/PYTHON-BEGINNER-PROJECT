@@ -1,0 +1,43 @@
+import tkinter as tk
+from time import strftime
+
+def set_custom_time():
+    global custom_time
+    custom_time = entry.get()
+    entry.delete(0, tk.END)
+    time()
+
+def time():
+    current_time = custom_time if custom_time else strftime('%H:%M:%S %p')
+    lbl.config(text=current_time)
+
+    # Extract the hour part to check if it's daytime or nighttime
+    current_hour = int(current_time.split(':')[0])
+
+    # Define a list of colors to cycle through
+    all_colors = ['lightblue', 'lightgreen', 'lightyellow', 'black', 'darkblue', 'darkpurple']
+
+    # Use a modulo operation to cycle through the list of colors
+    color_index = current_hour % len(all_colors)
+
+    # Set the background and foreground colors based on the time of day
+    lbl.config(background=all_colors[color_index], foreground='black' if 6 <= current_hour < 18 else 'white')
+
+    lbl.after(1000, time)
+
+root = tk.Tk()
+root.title("Digital Watch")
+
+custom_time = None
+
+entry = tk.Entry(root, font=('calibri', 20))
+entry.pack(pady=10)
+
+set_button = tk.Button(root, text="Set Custom Time", command=set_custom_time)
+set_button.pack()
+
+lbl = tk.Label(root, font=('calibri', 40, 'bold'), background='black', foreground='white')
+lbl.pack(anchor='center')
+
+time()
+root.mainloop()
