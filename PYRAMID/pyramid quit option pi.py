@@ -13,7 +13,6 @@ def print_pyramid():
             continue
 
         height = int(height_input)
-        i = 1
 
         while i <= height:
             if height <= 0:
@@ -33,12 +32,6 @@ def print_pyramid():
             else:
                 print("Invalid option for pi. Using the default value 3.14.")
                 pi_value = 3.14
-
-            spaces = " " * (height - i)
-            stars = "*" * (2 * i - 1)
-            print(spaces + stars)
-
-            i += 1
 
         if pi_option == 'quit':
             break
