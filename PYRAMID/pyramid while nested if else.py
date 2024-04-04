@@ -25,12 +25,6 @@ def print_pyramid():
             print("Invalid option for pi. Using the default value 3.14.")
             pi_value = 3.14
 
-        spaces = " " * (height - i)
-        stars = "*" * (2 * i - 1)
-        print(spaces + stars)
-
-        i += 1
-
     print(f"Using the value of pi: {pi_value}")
 
 # Call the function to print the pyramid
