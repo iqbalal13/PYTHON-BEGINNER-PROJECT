@@ -4,11 +4,6 @@ def print_pyramid():
 
         if height_input.isdigit():
             height = int(height_input)
-            for i in range(1, height + 1):
-                spaces = " " * (height - i)
-                stars = "*" * (2 * i - 1)
-                print(spaces + stars)
-            break
         else:
             print("Please enter a valid integer for the height.")
 
