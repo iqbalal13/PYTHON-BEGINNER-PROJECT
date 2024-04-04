@@ -17,10 +17,6 @@ def print_pyramid():
                 else:
                     print("Invalid option for pi. Using the default value 3.14.")
                     pi_value = 3.14
-
-                print(f"Using the value of pi: {pi_value}")
-            else:
-                print("Please enter a positive integer for the height.")
         except Exception as e:
             print(f"An error occurred: {e}")
     else:
