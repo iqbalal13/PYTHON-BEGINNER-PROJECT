@@ -14,15 +14,6 @@ def print_pyramid():
             else:
                 print("Invalid option for pi. Using the default value 3.14.")
                 pi_value = 3.14
-
-            for i in range(1, height + 1):
-                spaces = " " * (height - i)
-                stars = "*" * (2 * i - 1)
-                print(spaces + stars)
-
-            print(f"Using the value of pi: {pi_value}")
-        else:
-            print("Please enter a positive integer for the height.")
     else:
         print("Please enter a valid integer for the height.")
 
