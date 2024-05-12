@@ -1,33 +1,28 @@
-import matplotlib.pyplot as plt
-import numpy as np
-from mpl_toolkits.mplot3d import Axes3D
+def draw_3d_cone(height):
+    if height <= 0:
+        print("Invalid height. Please enter a positive integer.")
+        return
 
-def plot_3d_cone(radius, height):
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
+    for i in range(1, height + 1):
+        spaces = " " * (height - i)
+        stars = "*" * (2 * i - 1)
+        print(spaces + stars + spaces)
 
-    # Create the parametric circle for the base
-    theta = np.linspace(0, 2*np.pi, 100)
-    x_circle = radius * np.cos(theta)
-    y_circle = radius * np.sin(theta)
+# Example usage with error handling and quit option:
+max_attempts = 5  # Adjust the number of attempts as needed
 
-    # Plot the base circle
-    ax.plot(x_circle, y_circle, zs=0, zdir='z', color='b')
+for _ in range(max_attempts):
+    user_input = input("Enter the height of the 3D cone (type 'quit' to exit): ")
 
-    # Plot the lines connecting the top to the base
-    ax.plot([0]*len(theta), [0]*len(theta), zs=height, zdir='z', color='b')
-    ax.plot_surface([x_circle, x_circle], [y_circle, y_circle], [0, height], color='b', alpha=0.5)
+    if user_input.lower() == 'quit':
+        print("Exiting the program.")
+        break
 
-    # Set axis labels
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
-
-    plt.show()
-
-# Set the radius and height of the cone
-cone_radius = 5
-cone_height = 10
-
-# Call the function to plot the 3D cone
-plot_3d_cone(cone_radius, cone_height)
+    try:
+        cone_height = int(user_input)
+        if cone_height <= 0:
+            raise ValueError("Invalid input. Height must be a positive integer.")
+    except ValueError as e:
+        print(e)
+    else:
+        draw_3d_cone(cone_height)
